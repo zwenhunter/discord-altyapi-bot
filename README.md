@@ -5,8 +5,6 @@ Bu dosya projenin GitHub üzerinde paylaşılması için hazırlanmıştır. Aş
 ## Özet
 
 - Eski altyapıdaki token, intent, event ve komut yükleme hataları düzeltildi.
-- Bot mesajlarındaki emojiler kaldırıldı.
-- Hiçbir JavaScript dosyasında yorum satırı bırakılmadı.
 - Sunucuya özel çalışan, varsayılan olarak kapalı bir guard sistemi eklendi.
 - Moderasyon ve yardımcı komutlarla birlikte toplam komut sayısı 30'a çıkarıldı.
 - Kullanılmayan ve riskli npm paketleri temizlendi.
