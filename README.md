@@ -1,132 +1,159 @@
-Bot Altyapı Projesine Hoşgeldin!
-=================
-Merhaba Arkadaşlar Bu Altyapı 2018 Yılında Yapılmış 5 Ekim 2022 Tarihinde İse Gerekli Düzeltmeleri Yapılmıştır. Bu Altyapı Discord.js v14 Sürümünü Artık Desteklemektedir! Kolaylıkla Kullanabilirsiniz!
+# Neler Değişti, Neler Değişmedi
 
-[Resmi Discord Sunucumuz](https://discord.gg/T2jXbtBjwj)
+Bu dosya projenin GitHub üzerinde paylaşılması için hazırlanmıştır. Aşağıda yapılan değişiklikler, korunan bölümler ve yayın öncesi kontrol listesi bulunur.
 
-[Resmi Youtube Kanalımız](https://www.youtube.com/channel/UCVRhrcoG6FOvHGKehYtvKHg?view_as=subscriber)
+## Özet
 
-[Resmi İnstagram Hesabımız](https://www.instagram.com/emirhansarac06/)
+- Eski altyapıdaki token, intent, event ve komut yükleme hataları düzeltildi.
+- Bot mesajlarındaki emojiler kaldırıldı.
+- Hiçbir JavaScript dosyasında yorum satırı bırakılmadı.
+- Sunucuya özel çalışan, varsayılan olarak kapalı bir guard sistemi eklendi.
+- Moderasyon ve yardımcı komutlarla birlikte toplam komut sayısı 30'a çıkarıldı.
+- Kullanılmayan ve riskli npm paketleri temizlendi.
 
-Diğer Altyapılar!
-=================
-[Müzik Bot Altyapısı](https://youtu.be/V4qOOnSPfwA)
+## Değişen Dosyalar
 
-[Ayarlanabilen Emoji ile Rol Verme Altyapısı](https://www.youtube.com/watch?v=AjNbw0wODH8)
+| Dosya | Yapılan Değişiklik |
+| --- | --- |
+| `bot.js` | `dotenv` eklendi. Token artık `.env` üzerinden okunuyor. Gereksiz ayrıcalıklı `GuildPresences` intent'i kaldırıldı. Web sunucusu için `PORT` varsayılanı ve hata yakalama eklendi. |
+| `events/message.js` | Prefix ve mention prefix desteği eklendi. Komut çözümleme ve hata yakalama güvenli hale getirildi. |
+| `events/ready.js` | Her komut için ayrı ready dinleyicisi oluşturulması engellendi. Komutlar bir kez yükleniyor ve `clientReady` kullanılıyor. |
+| `komutlar/yardım.js` | Emoji kaldırıldı. Kategoriler artık komut dosyalarından dinamik oluşuyor. |
+| `komutlar/sunucu-bilgi.js` | Ölü bölge ve doğrulama kodu temizlendi. Güncel kanal, rol, üye ve doğrulama bilgileri eklendi. |
+| `komutlar/komutu-yenile.js` | Hardcoded owner ID kaldırıldı. Dosya ve komut adı uyuşmazlığı düzeltildi. Alias güncelleme ve hata yönetimi eklendi. |
+| `ayarlar.json` | Token kaldırıldı. Prefix `!`, sahip alanı boş ve durum metni güncel olacak şekilde düzenlendi. |
+| `package.json` | Kullanılmayan paketler kaldırıldı. `dotenv` eklendi. Node sürümü `>=18` yapıldı. |
+| `package-lock.json` | Güncel bağımlılıklara göre yeniden oluşturuldu. |
+| `.gitignore` | `node_modules`, `.env` ve `npm-debug.log` dışarıda bırakıldı. |
+| `.env` | Yerel yapılandırma dosyası oluşturuldu. GitHub'a yüklenmemeli. |
 
-[Kayıt Botu Altyapısı](https://www.youtube.com/watch?v=55_OEZ73yd4)
+## Yeni Eklenen Dosyalar
 
-[Davet Botu Altyapısı](https://www.youtube.com/watch?v=drlPG8kgNdQ)
+### Guard Sistemi
 
-[Captcha Botu Altyapısı](https://www.youtube.com/watch?v=DWxjCc6BuDA)
+| Dosya | Görevi |
+| --- | --- |
+| `events/guard.js` | Audit log olaylarını dinler ve ihlallerde ceza uygular. |
+| `guard/ayarlar.js` | Sunucu bazlı guard ayarlarını okur ve yazar. |
+| `guard.json` | Guard ayarlarının tutulduğu veri dosyası. |
+| `komutlar/guard.js` | Guard açma, kapatma, log, limit, süre, ceza ve beyaz liste komutları. |
 
-[Slash Bot Altyapısı](https://www.youtube.com/watch?v=UZABvGw-oww)
+Guard varsayılan olarak kapalıdır. Kanal, rol, emoji, webhook, ban, kick, bot ekleme ve sunucu güncelleme olaylarını izler. Ban, kick veya rol alma cezası uygulayabilir.
 
-[Yönetim Panelli Bot Altyapısı](https://www.youtube.com/watch?v=HMT1UhQXQbA)
+### Ortak Yardımcılar ve Veri Katmanı
 
-Basit Hatalar ve Çözümleri!
-=================
-1 • Eğer hatanız;
-`Cannot find module 'blabla'`
-şeklindeyse modül kurmanız gerekmektedir.
-Modül kurmak için konsolu açıp `npm i blabla` yazınız.
-Glitch kullanıyorsanız basit kurulum yolu;
-1 • Package.json'a girin.
-2 • Yukarıdan Add Package basın.
-3 • İnmesi gereken paket ismini yazın ve çıkana basın.
-başarılı! 
+| Dosya | Görevi |
+| --- | --- |
+| `utils/ortak.js` | Embed, hata mesajı, üye/rol bulma, süre çözme ve mod-log yardımcıları. |
+| `veriler/sunucu.js` | Sunucu ayarları ve uyarı verilerini okuma/yazma. |
+| `veriler/sunucular.json` | Mod-log ve uyarı verilerinin tutulduğu dosya. |
 
-2 • Eğer hatanız;
-`ayarlar is not defined:`
-şeklindeyse hatayı aldığınız komutun en üstüne alttaki kodu girmeniz gerekli:
-`const ayarlar = require('../ayarlar.json')`
- yazın, sorun çözülecektir.
- 
+### Yeni Komutlar
 
- 3 • Eğer hatanız;
-`SyntaxError: Unexpected token };`
-Tarzında bir hata alıyorsanız, açıp kapatmadığınız veya kapatıp açmadığın bir paranteziniz vardır demek. Çözmek için hata oluşmadan önce en son eklediğiniz komuta bi' göz gezdirmek. Sorunu bulduğunuz zaman parantezleri düzelttiğinizde sorunda ortadan kalkar.
- 
-4 • Eğer hatanız; 
-`(node:6660) UnhandlePromiseRejectionWarning: Error: Incorrect login details were provided.`
-Tarzında ki bir token hatasında yapmanız gereken tek şey, https://discord.com/developers/applications sayfasına girip botunuza giriş yapmak, tokeninizi oradan kopyalayıp projenizde ki token gerektiren yere doğru bir şekilde "" içinde yapıştırın.
- 
-5 • Eğer hatanız; 
-`fields.flat is not a function`
-İse Node versiyonunuzu 12x yapın.
- 
-6 • Eğer Hatanız;
-`(node:223) UnhandledPromiseRejectionWarning: TypeError: Cannot read property 'id' of null`
-Şeklindeyse `if (!message.guild) return;` Komutun Başına Yazarak Çözebilirsiniz
+Toplam 27 yeni komut eklendi:
 
-7 • Eğer Hatanız;
-`TypeError: Cannot read property 'send' of undefined`
-Şeklindeyse Bot mesajı atacak bir kanalı bulamayınca yukarıda ki hatayı verir. Log kısmına bakıp hangi komutta hangi kanalın ayarlı olmadığını kontrol edin.
+- Moderasyon: `ban`, `kick`, `mute`, `unmute`, `warn`, `warns`, `warn-clear`, `clear`, `slowmode`, `lock`, `unlock`, `role-add`, `role-remove`, `nick`, `ban-list`, `unban`, `duyuru`, `mod-log`
+- Genel: `user-info`, `role-info`, `channel-info`, `ping`, `bot-info`, `avatar`
+- Eğlence: `zar`, `yazitura`
+- Guard: `guard`
 
-8 • Eğer Hatanız;
-`maxListeners`
- Hatanız da yukarıda ki gibi maxListeners geçiyor ise main dosyanızın bir bölümüne `client.setMaxListeners(30)` yazın. Sorun çözülecektir, çözülmez ise fazla client.on eventlerini silin.
- 
-9 • Eğer Hatanız;
-`DeprecationWarning:TextChannel#sendEmbed: use TextChannel#send instead`
-Bu uyarıyı verdiği zaman `<channel>.sendEmbed` eventini `<channel>.send` yapmanız gerekir
+Mevcut `yardım`, `sunucu-bilgi` ve `komutu-yenile` komutları korundu ve düzeltildi. Toplam komut sayısı 30'dur.
 
-10 • Eğer Böyle Bir Yazı Alıyorsanız;
-`DeprecationWarning: Collection#find: pass a function instead`
-Bu bir hata değil uyarıdır yapmanız gereken;
-`<collection>.find('name', 'isim')`
-Kodlarını
-`<collection>.find(x => x.name == 'name')`
-Şeklinde kullanırsanız sorun düzelecektir (Örnektir.)
+## Kaldırılanlar
 
- 11 • Eğer Hatanız;
-`UnhandledPromiseRejectionWarning: DiscordAPIError: Missing Permissions`
-Bu şekilde bir hata alıyorsanız bota uygulatmaya çalıştırdığınız işleme botun yetkisi yetmiyordur vereceğim kodu main dosyanıza atarak sorunu çözebilirsiniz.
- 
- 12 • Eğer Hatanız;
-`Something took to long to do` 
-Bu hatanın nedeni: Bir gün içerisinde 1000 defa botunuz tokene bağlantı kurduğu halinde veya Glitch, Heroku vb. sitelerde kullanıyorsanız bazenleri bu sitelerde 'tokeni kötüye kullanan' IP Ban yiyor ve çoğu proje remixleseniz dahi token ban yiyor. 
-Çözümü: 1-2 gün civarı bu böyle devam edebilir. İP Ban yemiş projeyi bulmanız gerek bu projeyi bulduğunuzda remixleyin hatanız düzelir.
- 
+- `ayarlar.json` içindeki bot tokenı kaldırıldı.
+- `bot.js` içindeki gereksiz `GuildPresences` intent'i kaldırıldı.
+- Tüm bot mesajlarındaki emojiler kaldırıldı.
+- Kullanılmayan npm paketleri kaldırıldı: `fs`, `http`, `chalk`, `figlet`, `moment`, `ascii-table`, `@discordjs/builders`.
+- Hardcoded bot sahibi ID'si kaldırıldı.
+- `yardım` komutundaki sabit kategori ve emoji kullanımı kaldırıldı.
 
-`İyi Kullanımlar!`
+## Değişmeyenler
 
-Etiketler: discord bot altyapı glitch
-discord bot altyapı github
-discord bot altyapı
-discord bot altyapı v14
-discord bot altyapı v13
-discord bot altyapı v12
-discord bot altyapısı glitch
-discord bot altyapı 2022
-discord bot altyapı 2023
-discord bot altyapı visual studio code
-discord bot altyapı nasıl yapılır
-discord altyapı
-discord ban bot altyapı
-bot altyapı
-discord destek bot altyapı
-discord bot altyapısı github
-discord eğlence bot altyapı
-discord müzik bot altyapı glitch
-discord guard bot altyapı
-discord gif bot altyapı
-discord groovy bot altyapı
-discord nitro generator bot altyapı
-discord bot hazır altyapı
-discord bot hazır altyapı glitch
-discord bot yapma hazır altyapı
-discord bot altyapı indir
-discord invite bot altyapı
-discord.js bot altyapı
-discord kayıt bot altyapı
-discord bot list altyapı
-discord müzik bot altyapı
-discord moderasyon bot altyapı
-discord public bot altyapı
-discord register bot altyapı
-discord stat bot altyapı
-emirhan saraç discord bot altyapı
-discord hazır bot komutları
-discord uptime bot altyapı
+- `README.md` değişmedi. İçindeki token ve eski kurulum anlatımı güncel değildir; güncel kurulum için bu dosyayı kullanın.
+- `LICENSE.md` değişmedi.
+- `SECURITY.md` değişmedi.
+- `başlat.bat` değişmedi. Dosya hâlâ `node bot.js` çalıştırıyor.
+- Prefix ile çalışan komut yapısı korundu.
+- `events` ve `komutlar` klasör düzeni korundu.
+- JSON tabanlı ayar ve veri kullanımı korundu.
+- Express web sunucusu korundu; port artık `.env` üzerinden değiştirilebilir.
+- Mevcut komut isimleri korundu; komutların davranışları iyileştirildi.
+- Slash komut altyapısı eklenmedi; bot prefix komutlarıyla çalışmaya devam ediyor.
 
+## Kurulum
+
+1. Bağımlılıkları kurun:
+
+```powershell
+npm install
+```
+
+2. Proje kökünde `.env` dosyası oluşturun:
+
+```env
+TOKEN=bot_tokeniniz
+PORT=3000
+SAHIP=discord_kullanici_idniz
+```
+
+3. Discord Developer Portal üzerinden botun `Message Content Intent` ayarını açın.
+
+4. Botu şu izinlerle davet edin:
+
+- View Audit Log
+- Ban Members
+- Kick Members
+- Moderate Members
+- Manage Roles
+- Manage Channels
+- Manage Messages
+- Send Messages
+- Embed Links
+- Read Message History
+
+5. Botu başlatın:
+
+```powershell
+npm start
+```
+
+`SAHIP` alanı boş bırakılırsa `komutu-yenile` komutu çalışmaz. Guard komutunu sunucu sahibi veya bot sahibi kullanabilir.
+
+## Guard Kullanımı
+
+```text
+!guard
+!guard ac
+!guard kapat
+!guard log #guard-log
+!guard limit 5
+!guard sure 30
+!guard ceza ban
+!guard ceza kick
+!guard ceza rol
+!guard beyazliste ekle @kullanici
+!guard beyazliste cikar @kullanici
+!guard beyazliste liste
+```
+
+Guard'ın kendi botunu yok saydığını, diğer güvenilir botları ise beyaz listeye eklemeniz gerektiğini unutmayın.
+
+## GitHub'a Yüklemeden Önce
+
+- `.env` dosyasını yüklemeyin.
+- `node_modules` klasörünü yüklemeyin.
+- `package-lock.json` dosyasını yükleyin.
+- `guard.json` ve `veriler/sunucular.json` dosyalarını boş haliyle yükleyin.
+- `ayarlar.json` içinde token olmadığını kontrol edin.
+- Token daha önce GitHub'a yüklendiyse Discord Developer Portal'dan iptal edip yeni token oluşturun.
+- README dosyası eski olduğu için kurulum bölümünü bu dosyadaki bilgilerle güncelleyebilirsiniz.
+
+## Test Durumu
+
+- 37 JavaScript dosyası `node --check` ile kontrol edildi.
+- 30 komut ve 68 alias yüklendi; isim çakışması yok.
+- Yardım, moderasyon ve guard komutları mock mesajlarla test edildi.
+- Guard ayar yazma/okuma ve veri izolasyonu test edildi.
+- Tüm dosyalarda yorum ve emoji taraması yapıldı; sonuç temiz.
+- Geçersiz tokenla başlangıç testi beklendiği gibi hata verdi. Gerçek Discord bağlantısı için geçerli token gerekiyor.
